@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    triggers { 
+    triggers {
         // Poll SCM every minute for new changes
         pollSCM('* * * * *')
     }
@@ -8,7 +8,7 @@ pipeline {
        // add timestamps to output
        timestamps()
     }
-    environment { 
+    environment {
         MLFLOW_TRACKING_URL = 'http://mlflow:5000'
     }
     stages {
@@ -28,11 +28,11 @@ pipeline {
                 sh 'python3 run_python_script.py pipeline'
             }
         }
-//         stage('Acceptance test') {
-//             steps {
-//                 sh 'python3 run_python_script.py acceptance'
-//             }
-//         }
+        stage('Acceptance test') {
+            steps {
+                sh 'python3 run_python_script.py acceptance'
+            }
+        }
         stage('Deploy model') {
             steps {
                 sh 'curl --request POST --data-binary "@data/models/model.pkl" http://model:5005/replace_model'
